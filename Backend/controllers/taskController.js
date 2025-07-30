@@ -15,8 +15,8 @@ const verifyOwnership = async (projectId, userId) => {
   return project;
 };
 
-// @desc    Get all tasks in a project
-// @route   GET /api/projects/:projectId/tasks
+//    Get all tasks in a project
+// GET /api/projects/:projectId/tasks
 export const getTasks = async (req, res, next) => {
   try {
     const project = await verifyOwnership(req.params.projectId, req.user._id);
@@ -27,8 +27,8 @@ export const getTasks = async (req, res, next) => {
   }
 };
 
-// @desc    Create a task in a project
-// @route   POST /api/projects/:projectId/tasks
+//     Create a task in a project
+//   POST /api/projects/:projectId/tasks
 export const createTask = async (req, res, next) => {
   try {
     const project = await verifyOwnership(req.params.projectId, req.user._id);
@@ -47,8 +47,8 @@ export const createTask = async (req, res, next) => {
   }
 };
 
-// @desc    Update a task
-// @route   PUT /api/projects/:projectId/tasks/:taskId
+//     Update a task
+//  PUT /api/projects/:projectId/tasks/:taskId
 export const updateTask = async (req, res, next) => {
   try {
     const project = await verifyOwnership(req.params.projectId, req.user._id);
@@ -71,8 +71,8 @@ export const updateTask = async (req, res, next) => {
   }
 };
 
-// @desc    Delete a task
-// @route   DELETE /api/projects/:projectId/tasks/:taskId
+//     Delete a task
+//    DELETE /api/projects/:projectId/tasks/:taskId
 export const deleteTask = async (req, res, next) => {
   try {
     const project = await verifyOwnership(req.params.projectId, req.user._id);
@@ -89,7 +89,7 @@ export const deleteTask = async (req, res, next) => {
   }
 };
 
-
+export default taskController
 
 
 

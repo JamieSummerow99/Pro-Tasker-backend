@@ -5,7 +5,7 @@ dotenv.config();
 
 const mongoUri = process.env.MONGO_URI;
 if (!mongoUri) {
-  throw new Error("MONGO_URI environment variable is not defined, dannnggg.");
+  throw new Error("MONGO_URI");
 }
 
 mongoose.connect(mongoUri, {
@@ -14,7 +14,7 @@ mongoose.connect(mongoUri, {
 });
 
 mongoose.connection.on("connected", () => {
-  console.log("Mongoose connected to", mongoUri);
+  console.log("We In THERE!!!!!!!!!", mongoUri);
 });
 
 mongoose.connection.on("error", (err) => {
@@ -22,7 +22,7 @@ mongoose.connection.on("error", (err) => {
 });
 
 mongoose.connection.on("disconnected", () => {
-  console.log("Mongoose disconnected");
+  console.log("MogoDBdisconnected");
 });
 
 export default mongoose.connection;     

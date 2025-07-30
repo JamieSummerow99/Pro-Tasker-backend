@@ -38,3 +38,6 @@ export const loginUser = async (req, res, next) => {
     next(err);
   }
 };
+
+
+export default authController

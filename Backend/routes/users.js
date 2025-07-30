@@ -17,8 +17,9 @@ router.post("/register", async (req, res) => {
   } catch (err) {
     res.status(400).json(err);
   }
+  
 });
-
+//got 200
 // POST /api/users/login - Authenticate a user and return a token
 router.post("/login", async (req, res) => {
   try {
@@ -36,6 +37,27 @@ router.post("/login", async (req, res) => {
 
     const token = signToken(user);
     res.json({ token, user });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json(error);
+  }
+});
+//got 200 messege
+router.get("/profile", async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json(error);
+  }
+});
+
+router.put("/profile", async (req, res) => {
+
+  try {
+    const user = await User.findByIdAndUpdate(req.user.id, req.body, { new: true });
+    res.json(user); 
   } catch (error) {
     console.error(error);
     res.status(400).json(error);

@@ -1,0 +1,56 @@
+import mongoose,{ Schema} from "mongoose";
+
+
+
+const taskSchema = new Schema({
+  title: {
+    type: String,
+    required: true
+  },
+//gives context to the task
+  description: {
+    type: String,
+    required: true
+  },
+//project to which the task belongs
+  project: {
+    type: Schema.Types.ObjectId,
+    ref: "Project",
+    required: true
+  },
+//WHO
+  assignedTo: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
+
+  status: {
+    type: String,
+    enum: ["To Do", "In Progress", "Done"],
+    default: "To Do"
+  },
+
+  tags: {
+    type: [String],
+    enum: ["work", "personal", "urgent", "important"],
+    default: ["work"]
+  },
+
+  dueDate: {
+    type: Date
+  },
+
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+const Task = mongoose.model("Task", taskSchema);
+
+
+export default Task;
+
+

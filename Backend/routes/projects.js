@@ -18,6 +18,7 @@ function projectsRouter() {
   });
 
   // Create a new project
+  // POST /api/projects
   router.post("/", async (req, res) => {
     try {
       const newProject = await Project.create({

@@ -1,7 +1,21 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+// JWT authentication functions//
+//the pass code from .env
 import jwt from "jsonwebtoken";
 
+
 const secret = process.env.JWT_SECRET;
-const expiration = "24h";
+//expiration in 900 hours
+const expiration ="900h";
+
+
+export function signToken({ username, email, _id }) {
+  const payload = { username, email, _id };
+
+  return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
+}
 
 export function authMiddleware(req, res, next) {
   let token = req.body?.token || req.query?.token || req.headers.authorization;
@@ -10,10 +24,8 @@ export function authMiddleware(req, res, next) {
     token = token.split(" ").pop().trim();
   }
 
-  if (!token) {
-    return res
-      .status(401)
-      .json({ message: "You must be logged in to do that." });
+  if(!token) {
+    return res.status(401).json({ message: " Turn around and log in "});
   }
 
   try {
@@ -21,27 +33,11 @@ export function authMiddleware(req, res, next) {
     req.user = data;
   } catch {
     console.log("Invalid token");
-    return res.status(401).json({ message: "Invalid token." });
+    return res.status(401).json({ message: "Bad token."});
   }
 
-  next();
+  next()
+
 }
 
-export function signToken({ username, email, _id }) {
-  const payload = { username, email, _id };
 
-  return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
-}
-
-export function verifyOwnership(projectId, userId) {
-  return Project.findOne({ _id: projectId, owner: userId })
-    .then(project => {
-      if (!project) {
-        throw new Error("You do not have permission to access this project.");
-      }
-      return project;
-    })
-    .catch(err => {
-      throw new Error(err.message);
-    });
-}
