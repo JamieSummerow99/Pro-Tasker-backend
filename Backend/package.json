@@ -4,7 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1", "dev": "nodemon sever.js", "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "start": "node server.js" 
+    
   },
   "keywords": [],
   "author": "",
@@ -17,6 +20,10 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.5",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "react": "^19.1.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3"
   }
 }
