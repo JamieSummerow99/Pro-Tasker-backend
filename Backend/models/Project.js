@@ -1,6 +1,8 @@
-import mongoose from "mongoose";
 
-const { Schema, model } = mongoose;
+import mongoose, { Schema} from "mongoose";
+import bcrypt from "bcrypt";
+
+
 
 const projectSchema = new Schema({
   name: {
@@ -14,4 +16,5 @@ const projectSchema = new Schema({
   },
 });
 
-export default model("Project", projectSchema);
+const Project = mongoose.model("Project", projectSchema)
+export default Project;

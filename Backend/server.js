@@ -4,7 +4,7 @@ import cors from "cors";
 import db from "./config/connection.js";
 
 import usersRouter from "./routes/users.js";
-import postsRouter from "./routes/posts.js";
+
 import projectsRouter from "./routes/projects.js";
 import tasksRouter from "./routes/tasks.js";
 
@@ -38,9 +38,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // --- Routes ---
 app.use("/api/users", usersRouter);
-app.use("/api/posts", postsRouter);
+
 app.use("/api/projects", projectsRouter);
-app.use("/api/tasks", tasksRouter);
+app.use("/api/:projectId/tasks", tasksRouter);
+
+
 
 
 app.get("/", (req, res) => {
@@ -50,8 +52,10 @@ app.get("/", (req, res) => {
 app.get("/api", (req, res) => {
   res.send("API is running...");
 });
-
-
+app.post("/api/users/login", (req, res) => {
+  res.send("logging into your account")
+})
+//this gives a 200 request
 db.once("open", () => {
   app.listen(PORT, () => {
     console.log(`✅ We In There like swimwear http://localhost:${PORT}`);

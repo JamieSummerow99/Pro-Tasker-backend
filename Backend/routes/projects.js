@@ -1,95 +1,82 @@
-import Project from '../models/Project.js';
+import express from "express";
+import Project from "../models/Project.js";
+import { authMiddleware } from "../utils/auth.js";
 
-function projectsRouter() {
-  const router = express.Router();
+const router = express.Router();
 
-  // Middleware to protect routes
-  router.use(authMiddleware);
+router.use(authMiddleware);
 
-  // Get all projects
-  router.get("/", async (req, res) => {
-    try {
-      const projects = await Project.find().populate('owner collaborators');
-      res.json(projects);
-    } catch (error) {
-      console.error(error);
-      res.status(400).json(error);
-    }
-  });
-
-  // Create a new project
-  // POST /api/projects
-  router.post("/", async (req, res) => {
-    try {
-      const newProject = await Project.create({
-        ...req.body,
-        owner: req.user._id,
-      });
-      res.json(newProject);
-    } catch (error) {
-      console.error(error);
-      res.status(400).json(error);
-    }
-  });
-
-  // Update an existing project
-  router.put("/:id", async (req, res) => {
-    try {
-      const updatedProject = await Project.findByIdAndUpdate(
-        req.params.id,
-        { ...req.body, owner: req.user._id },
-        { new: true }
-      ).populate('owner collaborators');
-      res.json(updatedProject);
-    } catch (error) {
-      console.error(error);
-      res.status(400).json(error);
-    }
-  });
-
-  // Delete a project
-  router.delete("/:id", async (req, res) => {
-    try {
-      await Project.findByIdAndDelete(req.params.id);
-      res.json({ message: "Project deleted successfully" });
-    } catch (error) {
-      console.error(error);
-      res.status(400).json(error);
-    }
-  });
-
-  // Get a single project by ID
-  router.get("/:id", async (req, res) => {
-    try {
-      const project = await Project.findById(req.params.id).populate('owner collaborators');
-      if (!project) {
-        return res.status(404).json({ message: "Project not found" });
-      }
-      res.json(project);
-    } catch (error) {
-      console.error(error);
-      res.status(400).json(error);
-    }
-  });
-
-  return router;
-}
-
-
-export const create = async (req, res, next) => {
+// GET all projects
+router.get("/projects", async (req, res) => {
   try {
-    const project = await Project.findById(req.params.id);
-    if (!project) {
-      return res.status(404).json({ message: 'Project not found' });
-    }
-    if (project.owner.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'You do not have permission to access this project' });
-    }
-    req.project = project;
-    next();
+    const projects = await Project.find().populate("owner collaborators");
+    res.json(projects);
   } catch (err) {
-    next(err);
+    console.error("Error fetching projects:", err);
+    res.status(500).json({ error: "Failed to fetch projects" });
   }
-};
+});
 
-export default projectsRouter;// Remove export default router; since 'router' is not defined in this file
+// GET one project by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id).populate(
+      "owner collaborators"
+    );
+    if (!project) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+    res.json(project);
+  } catch (err) {
+    console.error("Error fetching project:", err);
+    res.status(500).json({ error: "Failed to fetch project" });
+  }
+});
+
+// CREATE new project
+router.post("/", async (req, res) => {
+  try {
+    const { name, description, owner, collaborators } = req.body;
+
+    const newProject = new Project({
+      name,
+      description,
+      owner,
+      collaborators,
+    });
+
+    const savedProject = await newProject.save();
+    res.status(201).json(savedProject);
+  } catch (err) {
+    console.error("Error creating project:", err);
+    res.status(400).json({ error: "Failed to create project" });
+  }
+});
+
+// UPDATE a project
+router.put("/:id", async (req, res) => {
+  try {
+    const updatedProject = await Project.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(updatedProject);
+  } catch (err) {
+    console.error("Error updating project:", err);
+    res.status(400).json({ error: "Failed to update project" });
+  }
+});
+
+// DELETE a project
+router.delete("/:id", async (req, res) => {
+  try {
+    await Project.findByIdAndDelete(req.params.id);
+    res.json({ message: "Project deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting project:", err);
+    res.status(400).json({ error: "Failed to delete project" });
+  }
+});
+
+export default router;
