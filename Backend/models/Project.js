@@ -1,20 +1,21 @@
-
-import mongoose, { Schema} from "mongoose";
-import bcrypt from "bcrypt";
-
-
-
-const projectSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
+import mongoose from 'mongoose'
+//this is the structure in which the project page will show
+const projectSchema = new mongoose.Schema(
+  {//to test {"title":"","description":""}
+    title: {
+      type: String,
+      required: true,
+    },
+    description: String,
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
+  { timestamps: true }//timestam
+);
 
-  description: {
-    type: String,
-  },
-});
+;
 
 const Project = mongoose.model("Project", projectSchema)
 export default Project;

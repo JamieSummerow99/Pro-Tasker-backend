@@ -10,7 +10,7 @@ const taskSchema = new Schema({
 //gives context to the task
   description: {
     type: String,
-    required: true
+    required: false
   },
 //project to which the task belongs
   project: {
@@ -19,12 +19,7 @@ const taskSchema = new Schema({
     required: true
   },
 //WHO
-  assignedTo: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User"
-    }
-  ],
+ 
 
   status: {
     type: String,
@@ -35,7 +30,7 @@ const taskSchema = new Schema({
   tags: {
     type: [String],
     enum: ["work", "personal", "urgent", "important"],
-    default: ["work"]
+    default: ["personal"]
   },
 
   dueDate: {
