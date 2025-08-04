@@ -5,7 +5,7 @@ dotenv.config();
 
 const mongoUri = process.env.MONGO_URI;
 if (!mongoUri) {
-  throw new Error("MONGO_URI");
+  throw new Error("MONGO_URI missing");
 }
 
 mongoose.connect(mongoUri, {

@@ -1,14 +1,13 @@
-import express, { Router } from "express";
+import express from "express";
 import Task from "../models/Task.js";
 import { authMiddleware } from "../utils/auth.js";
 
-
 const router = express.Router();
 
+// Apply authentication middleware globally to task routes
 router.use(authMiddleware);
 
-
-// GET all tasks (optional: for testing/debugging!!!)
+// GET all tasks (for testing/debugging)
 router.get("/", async (req, res) => {
   try {
     const tasks = await Task.find().populate("project assignedTo");
@@ -29,7 +28,8 @@ router.get("/project/:projectId", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch tasks for project" });
   }
 });
-// CREATE a new task for a project
+
+// CREATE a new task
 router.post("/project/:projectId", async (req, res) => {
   try {
     const { title, description, assignedTo, status, tags, dueDate } = req.body;
@@ -78,4 +78,4 @@ router.delete("/:taskId", async (req, res) => {
   }
 });
 
-export default Router
+export default router;
